@@ -28,11 +28,20 @@ pipeline {
 
         stage('Build Docker Images') {
             steps {
-                sh 'docker compose build'
+                sh 'docker build -t prabhatranjansrivastava/employee-backend ./backend'
+                sh 'docker build -t prabhatranjansrivastava/employee-frontend ./frontend'
             }
         }
 
-        stage('Run Application') {
+        stage('Push Docker Images') {
+            steps {
+                sh 'docker login -u prabhatranjansrivastava -p $DOCKERHUB_PASSWORD'
+                sh 'docker push prabhatranjansrivastava/employee-backend'
+                sh 'docker push prabhatranjansrivastava/employee-frontend'
+            }
+        }
+
+        stage('Deploy With Docker Compose') {
             steps {
                 sh 'docker compose down'
                 sh 'docker compose up -d'
