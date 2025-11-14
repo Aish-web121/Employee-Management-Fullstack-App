@@ -1,14 +1,34 @@
 pipeline {
     agent any
+
     stages {
-        stage('Install Dependencies') {
+
+        stage('Backend Build (Maven)') {
             steps {
-                sh 'npm install'
+                dir('backend') {
+                    sh 'mvn clean package -DskipTests'
+                }
             }
         }
-        stage('Build') {
+
+        stage('Frontend Build (React)') {
             steps {
-                sh 'npm run build'
+                dir('frontend') {
+                    sh 'npm install'
+                    sh 'npm run build'
+                }
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                sh 'docker compose build'
+            }
+        }
+
+        stage('Run Containers') {
+            steps {
+                sh 'docker compose up -d'
             }
         }
     }
