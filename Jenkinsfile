@@ -3,7 +3,13 @@ pipeline {
 
     stages {
 
-        stage('Backend Build (Maven)') {
+        stage('Clone Code') {
+            steps {
+                echo 'Code automatically cloned by Jenkins'
+            }
+        }
+
+        stage('Backend Build') {
             steps {
                 dir('backend') {
                     sh 'mvn clean package -DskipTests'
@@ -11,7 +17,7 @@ pipeline {
             }
         }
 
-        stage('Frontend Build (React)') {
+        stage('Frontend Build') {
             steps {
                 dir('frontend') {
                     sh 'npm install'
@@ -26,8 +32,9 @@ pipeline {
             }
         }
 
-        stage('Run Containers') {
+        stage('Run Application') {
             steps {
+                sh 'docker compose down'
                 sh 'docker compose up -d'
             }
         }
