@@ -4,7 +4,7 @@ services:
     image: prabhatranjansrivastava/employee-backend
     container_name: backend
     ports:
-      - "8080:8080"
+      - "5000:5000"
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/employee_management
       SPRING_DATASOURCE_USERNAME: root
